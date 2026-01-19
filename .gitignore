@@ -1,0 +1,8 @@
+# Environment variables with credentials
+.env
+.DS_Store
+# Node modules
+node_modules/
+
+# Logs
+*.log
