@@ -390,7 +390,7 @@ app.get('/logout', (req: Request, res: Response) => {
 /**
  * Scope tests: call Org, Users, User Groups, Teams APIs with current token.
  * When token has required scope → expect 2xx (or 4xx if body/params missing).
- * When token does NOT have scope → expect 401.
+ * When token does NOT have scope → expect 403.
  */
 app.get('/scope-tests', async (req: Request, res: Response) => {
   console.log('[GET /scope-tests] Scope tests requested – has token?', !!currentUserTokens)
@@ -430,7 +430,7 @@ app.get('/scope-tests', async (req: Request, res: Response) => {
     <!DOCTYPE html>
     <html>
     <head>
-      <title>Scope Tests - User Management</title>
+      <title>Scope Tests - Org / Users / Teams / KB / Search / Conversations / Agents / Connectors</title>
       <style>
         body { font-family: Arial, sans-serif; max-width: 1000px; margin: 50px auto; padding: 20px; }
         table { border-collapse: collapse; width: 100%; margin: 20px 0; font-size: 14px; }
@@ -443,13 +443,13 @@ app.get('/scope-tests', async (req: Request, res: Response) => {
       </style>
     </head>
     <body>
-      <h1>Scope Tests (Org / Users / Teams / User Groups)</h1>
+      <h1>Scope Tests (Org / Users / Teams / User Groups / KB / Search / Conversations / Agents / Connectors)</h1>
       <div class="summary">
         <strong>Result:</strong> ${passedCount} / ${totalCount} tests passed.
         <br><strong>Token scopes:</strong> <code>${escapeHtml(currentUserTokens.scope || 'none')}</code>
       </div>
       <div class="info">
-        <strong>How to interpret:</strong> For each endpoint, if your token has the required scope, the API should return 2xx (or 4xx if the request is invalid). If your token does <em>not</em> have the scope, the API should return <strong>401</strong>. Use different <code>SCOPES</code> when logging in to test both cases.
+        <strong>How to interpret:</strong> For each endpoint, if your token has the required scope, the API should return 2xx (or 4xx if the request is invalid). If your token does <em>not</em> have the scope, the API should return <strong>403</strong>. Use different <code>SCOPES</code> when logging in to test both cases.
       </div>
       <table>
         <thead>

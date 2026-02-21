@@ -75,7 +75,7 @@ class TestTeamReadScope:
             if org_id:
                 url += f'&orgId={org_id}'
             response = make_request(url, method='GET', headers={'Authorization': f'Bearer {ACCESS_TOKEN}'})
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         url = f'{BACKEND_URL}/api/v1/teams?page=1&limit=10'
@@ -99,7 +99,7 @@ class TestTeamReadScope:
         if org_id:
             url += f'&orgId={org_id}'
         response = make_request(url, method='GET', headers={'Authorization': f'Bearer {ACCESS_TOKEN}'})
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestTeamWriteScope:
@@ -121,7 +121,7 @@ class TestTeamWriteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"name": "Team"})
@@ -160,7 +160,7 @@ class TestTeamWriteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"name": "Team Updated"})
@@ -214,4 +214,4 @@ class TestTeamWriteScope:
             },
             body=body
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403

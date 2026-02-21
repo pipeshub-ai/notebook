@@ -65,7 +65,7 @@ class TestUserGroupReadScope:
                 method='GET',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/userGroups',
@@ -89,7 +89,7 @@ class TestUserGroupReadScope:
             method='GET',
             headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestUserGroupWriteScope:
@@ -111,7 +111,7 @@ class TestUserGroupWriteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"name": "Group", "type": "standard"})
@@ -150,7 +150,7 @@ class TestUserGroupWriteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"name": "Group Updated", "type": "standard"})
@@ -204,4 +204,4 @@ class TestUserGroupWriteScope:
             },
             body=body
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403

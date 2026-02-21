@@ -82,8 +82,8 @@ The client will run at `http://localhost:8888`.
 6. Test the API endpoints:
    - **Get Organization** - `/api/org`
    - **Get User Info** - `/api/userinfo`
-   - **Scope Tests** - `/scope-tests` (Org, Users, Teams, User Groups – verifies 401 when scope is missing)
-7. To test scope enforcement: set `SCOPES` to a subset (e.g. `SCOPES=org:read`), log in, then open **Scope Tests**. Endpoints whose scope you did not request should return **401**.
+   - **Scope Tests** - `/scope-tests` (Org, Users, Teams, User Groups – verifies 403 when scope is missing)
+7. To test scope enforcement: set `SCOPES` to a subset (e.g. `SCOPES=org:read`), log in, then open **Scope Tests**. Endpoints whose scope you did not request should return **403**.
 
 ## ⚙️ Configuration
 
@@ -100,7 +100,7 @@ Configuration can be set via environment variables or a `.env` file:
 
 ## 📋 Task 3: Scope Testing (What Was Implemented)
 
-This section describes what was built to satisfy the mentor’s scope-testing task: **when the scope is provided, the API should work; when the scope is not provided, it should return 401.**
+This section describes what was built to satisfy the mentor’s scope-testing task: **when the scope is provided, the API should work; when the scope is not provided, it should return 403.**
 
 ### What Was Done
 
@@ -115,7 +115,7 @@ This section describes what was built to satisfy the mentor’s scope-testing ta
      - **Users:** `user:read` (List, Get by ID), `user:invite` (Create), `user:write` (Update), `user:delete` (Delete)
      - **User Groups:** `usergroup:read` (List), `usergroup:write` (Create, Update)
      - **Teams:** `team:read` (List), `team:write` (Create, Update)
-   - Each test calls the backend with your current token and checks: **has scope → 2xx (or 4xx if body/params invalid); no scope → 401.**
+   - Each test calls the backend with your current token and checks: **has scope → 2xx (or 4xx if body/params invalid); no scope → 403.**
 
 3. **`/scope-tests` route**  
    - Runs all of the above tests with the current token and shows a table: endpoint, required scope, whether your token has it, status code, pass/fail.
@@ -129,22 +129,22 @@ This section describes what was built to satisfy the mentor’s scope-testing ta
 - **“When I passed Org Read, Get Organization worked”**  
   1. Set `SCOPES=org:read openid` (or leave default which includes `org:read`).  
   2. Log in, open **Scope Tests**.  
-  3. **Get Organization** should pass (2xx or 4xx); others that need different scopes should show 401.
+  3. **Get Organization** should pass (2xx or 4xx); others that need different scopes should show 403.
 
 - **“When I didn’t give Org Read, it should fail with Invalid Token / Insufficient Scope”**  
   1. Set `SCOPES=user:read openid` (no `org:read`) in `.env`.  
   2. Restart the sample app, log in again.  
   3. Open **Scope Tests**.  
-  4. **Get Organization** should now show 401; User/Team/UserGroup endpoints that have the right scope can still pass.
+  4. **Get Organization** should now show 403; User/Team/UserGroup endpoints that have the right scope can still pass.
 
 - **“Org Write / Org Admin: with permission it works, without it should not”**  
-  - Same idea: log in with `SCOPES=org:read org:write` and run scope tests (Update Org should pass); then log in with only `org:read` and run again (Update Org should 401).  
-  - For Delete Org, use `org:admin` in `SCOPES` to see it pass (or 4xx if body/validation fails); without `org:admin`, Delete should 401.
+  - Same idea: log in with `SCOPES=org:read org:write` and run scope tests (Update Org should pass); then log in with only `org:read` and run again (Update Org should 403).  
+  - For Delete Org, use `org:admin` in `SCOPES` to see it pass (or 4xx if body/validation fails); without `org:admin`, Delete should 403.
 
 - **User Management, User Groups, Teams**  
-  - Use different `SCOPES` combinations (e.g. only `user:read`, only `team:read`, etc.), run **Scope Tests** each time, and confirm that only the endpoints whose scope you requested pass; the rest return 401.
+  - Use different `SCOPES` combinations (e.g. only `user:read`, only `team:read`, etc.), run **Scope Tests** each time, and confirm that only the endpoints whose scope you requested pass; the rest return 403.
 
-**Note:** For these tests to show 401 correctly when scope is missing, the PipesHub backend must accept OAuth Bearer tokens on `/api/v1/org`, `/api/v1/users`, `/api/v1/teams`, and `/api/v1/userGroups` and enforce scopes (e.g. via OAuth scope middleware, returning 401 for insufficient scope). If those routes only accept session JWTs, every call with an OAuth token may return 401 until the backend is updated.
+**Note:** For these tests to show 403 correctly when scope is missing, the PipesHub backend must accept OAuth Bearer tokens on `/api/v1/org`, `/api/v1/users`, `/api/v1/teams`, and `/api/v1/userGroups` and enforce scopes (e.g. via OAuth scope middleware, returning 403 for insufficient scope). If those routes only accept session JWTs, every call with an OAuth token may return 401 until the backend is updated.
 
 ## Scope tests (CLI)
 
@@ -159,7 +159,7 @@ Run all scope tests with one command: **`npm test`**. Tests are split by resourc
 | `tests/user-groups-scope-tests.test.ts` | **User Groups:** usergroup read (list), usergroup write (create, update) |
 | `tests/teams-scope-tests.test.ts` | **Teams:** team read (list), team write (create, update) |
 
-Each test asserts: **with scope → 2xx or 4xx; without scope → 401.** So you can see clearly what works and what doesn’t.
+Each test asserts: **with scope → 2xx or 4xx; without scope → 403.** So you can see clearly what works and what doesn’t.
 
 To run against a real backend, set in `.env` or environment:
 
@@ -240,7 +240,7 @@ The sample client requests the following scopes:
 | `/logout` | GET | Clears tokens and logs out |
 | `/api/org` | GET | Test API: Get organization info using OAuth token |
 | `/api/userinfo` | GET | Test API: Get user info via OIDC /userinfo endpoint |
-| `/scope-tests` | GET | Run scope tests (Org, Users, Teams, User Groups); expect 401 when scope missing |
+| `/scope-tests` | GET | Run scope tests (Org, Users, Teams, User Groups); expect 403 when scope missing |
 | `/admin` | GET | Admin panel for app management |
 | `/admin/delete-app` | POST | Delete the OAuth application |
 | `/admin/shutdown` | POST | Stop the sample server |

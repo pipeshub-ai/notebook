@@ -31,7 +31,7 @@ export function loadConfig(): AppConfig {
     const port = parseInt(process.env.PORT || '8888', 10)
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000'
 
-    const defaultScopes = 'org:read user:read openid profile email offline_access'
+    const defaultScopes = 'openid profile email offline_access'
     const config: AppConfig = {
         backend: {
             url: backendUrl,

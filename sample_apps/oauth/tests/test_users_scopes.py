@@ -72,7 +72,7 @@ class TestUserReadScope:
                 method='GET',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/users',
@@ -93,7 +93,7 @@ class TestUserReadScope:
                 method='GET',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/users/{user_id}',
@@ -118,7 +118,7 @@ class TestUserReadScope:
             method='GET',
             headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestUserInviteScope:
@@ -141,7 +141,7 @@ class TestUserInviteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"fullName": "User", "email": "user@example.com"})
@@ -196,7 +196,7 @@ class TestUserInviteScope:
             },
             body=body
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestUserWriteScope:
@@ -222,7 +222,7 @@ class TestUserWriteScope:
                 },
                 body=body
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         org_id = get_org_id_from_token(ACCESS_TOKEN)
         body = json.dumps({"fullName": "User Updated"})
@@ -280,7 +280,7 @@ class TestUserWriteScope:
             },
             body=body
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestUserDeleteScope:
@@ -296,7 +296,7 @@ class TestUserDeleteScope:
                 method='DELETE',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/users/{user_id}',
@@ -324,4 +324,4 @@ class TestUserDeleteScope:
             method='DELETE',
             headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403

@@ -22,7 +22,7 @@ class TestOrgReadScope:
                 method='GET',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/org',
@@ -46,7 +46,7 @@ class TestOrgReadScope:
             method='GET',
             headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestOrgWriteScope:
@@ -62,7 +62,7 @@ class TestOrgWriteScope:
                 },
                 body='{"name": "Org"}'
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/org',
@@ -98,7 +98,7 @@ class TestOrgWriteScope:
             },
             body='{"name": "Org"}'
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403
 
 
 class TestOrgAdminScope:
@@ -110,7 +110,7 @@ class TestOrgAdminScope:
                 method='DELETE',
                 headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
             )
-            assert response['status'] in [400, 401, 403, 404]
+            assert response['status'] == 403
             return
         response = make_request(
             f'{BACKEND_URL}/api/v1/org',
@@ -134,4 +134,4 @@ class TestOrgAdminScope:
             method='DELETE',
             headers={'Authorization': f'Bearer {ACCESS_TOKEN}'}
         )
-        assert response['status'] in [400, 401, 403, 404]
+        assert response['status'] == 403

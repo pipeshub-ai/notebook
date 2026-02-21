@@ -33,8 +33,6 @@ const oauthAppConfig: OAuthAppConfig = {
     redirectUris: ['http://localhost:8888/callback'],
     allowedGrantTypes: ['authorization_code', 'refresh_token'],
     allowedScopes: [
-        'org:read', 'org:write', 'org:admin',
-        'user:read', 'user:write', 'user:invite', 'user:delete',
         'usergroup:read', 'usergroup:write',
         'team:read', 'team:write',
         'openid', 'profile', 'email', 'offline_access',

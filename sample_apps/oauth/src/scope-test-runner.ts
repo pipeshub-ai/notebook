@@ -4,6 +4,10 @@ import {
   PLACEHOLDER_USER_ID,
   PLACEHOLDER_GROUP_ID,
   PLACEHOLDER_TEAM_ID,
+  PLACEHOLDER_KB_ID,
+  PLACEHOLDER_CONNECTOR_ID,
+  PLACEHOLDER_AGENT_ID,
+  PLACEHOLDER_CONV_ID,
   type ScopeTestCase,
 } from './scope-test-cases'
 
@@ -13,6 +17,11 @@ export {
   USERS_TEST_CASES,
   USER_GROUPS_TEST_CASES,
   TEAMS_TEST_CASES,
+  KB_TEST_CASES,
+  SEARCH_TEST_CASES,
+  CONVERSATIONS_TEST_CASES,
+  AGENTS_TEST_CASES,
+  CONNECTORS_TEST_CASES,
   SCOPE_TEST_CASES,
 } from './scope-test-cases'
 
@@ -79,6 +88,10 @@ export function buildPathReplace(ids: {
     [PLACEHOLDER_USER_ID]: ids.userId ?? PLACEHOLDER_USER_ID,
     [PLACEHOLDER_GROUP_ID]: ids.groupId ?? PLACEHOLDER_GROUP_ID,
     [PLACEHOLDER_TEAM_ID]: ids.teamId ?? PLACEHOLDER_TEAM_ID,
+    [PLACEHOLDER_KB_ID]: PLACEHOLDER_KB_ID,
+    [PLACEHOLDER_CONNECTOR_ID]: PLACEHOLDER_CONNECTOR_ID,
+    [PLACEHOLDER_AGENT_ID]: PLACEHOLDER_AGENT_ID,
+    [PLACEHOLDER_CONV_ID]: PLACEHOLDER_CONV_ID,
   }
 }
 
@@ -112,14 +125,18 @@ export async function callScopeEndpoint(
   return { status: res.status }
 }
 
+/**
+ * When token has required scope: 2xx or 4xx counts as pass.
+ * When token does NOT have scope: we expect 403 (Forbidden). 401 is not treated as correct for missing scope.
+ */
 function getPassedAndMessage(hasScope: boolean, status: number): { passed: boolean; message: string } {
   if (hasScope) {
     if (status >= 200 && status < 300) return { passed: true, message: `OK (${status})` }
     if (status >= 400 && status < 500) return { passed: true, message: `Auth OK (${status})` }
     return { passed: false, message: `Unexpected ${status}` }
   }
-  if (status === 401) return { passed: true, message: 'Correctly denied (401)' }
-  return { passed: false, message: `Expected 401, got ${status}` }
+  if (status === 403) return { passed: true, message: 'Correctly denied (403)' }
+  return { passed: false, message: `Expected 403, got ${status}` }
 }
 
 export async function runScopeTests(
