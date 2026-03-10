@@ -1,0 +1,12 @@
+[project]
+name = "pipeshub-sdk-sample-app"
+version = "0.1.0"
+description = "Sample application using PipesHub Python SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "pipeshub-sdk>=0.1.2",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"

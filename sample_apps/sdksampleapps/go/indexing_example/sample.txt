@@ -1,0 +1,2 @@
+This is a sample document for testing PipesHub knowledge base file upload.
+It contains some text that can be indexed and searched.
