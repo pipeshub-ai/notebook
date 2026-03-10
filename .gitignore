@@ -7,3 +7,5 @@ dist/
 # Logs
 *.log
 __pycache__/
+*.egg-info
+venv
