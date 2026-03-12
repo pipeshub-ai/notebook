@@ -1,0 +1,22 @@
+{
+  "name": "pipeshub-sdk-knowledge-bases-sample",
+  "version": "0.1.0",
+  "description": "Sample application demonstrating PipesHub KnowledgeBases API using the TypeScript SDK",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "run:local": "npm run check-env && npm run dev",
+    "check-env": "ts-node scripts/check-env.ts"
+  },
+  "dependencies": {
+    "@pipeshub-ai/sdk": "^0.1.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
