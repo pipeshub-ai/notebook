@@ -27,6 +27,6 @@ npx ts-node examples/create-knowledge-base/index.ts
 
 ## Code reference
 
-- **Client:** `getClient()` in `src/client.ts`
-- **Operation:** `createKnowledgeBase(client)` in `src/kb-ops.ts`
+- **Client:** `getClient()` in this folder’s `index.ts`
+- **Operation:** `createKnowledgeBase(client)` in this folder’s `index.ts`
 - **API:** `client.knowledgeBases.createKnowledgeBase({ kbName })`

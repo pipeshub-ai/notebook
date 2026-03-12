@@ -27,6 +27,6 @@ npx ts-node examples/list-knowledge-bases/index.ts
 
 ## Code reference
 
-- **Client:** `getClient()` in `src/client.ts`
-- **Operation:** `listKnowledgeBases(client)` in `src/kb-ops.ts`
+- **Client:** `getClient()` in this folder’s `index.ts`
+- **Operation:** `listKnowledgeBases(client)` in this folder’s `index.ts`
 - **API:** `client.knowledgeBases.listKnowledgeBases({ permissions, limit, sortBy })`

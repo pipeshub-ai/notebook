@@ -27,6 +27,6 @@ npx ts-node examples/get-hub-root-nodes/index.ts
 
 ## Code reference
 
-- **Client:** `getClient()` in `src/client.ts`
-- **Operation:** `getKnowledgeHubRootNodes(client)` in `src/kb-ops.ts`
+- **Client:** `getClient()` in this folder’s `index.ts`
+- **Operation:** `getKnowledgeHubRootNodes(client)` in this folder’s `index.ts`
 - **API:** `client.knowledgeBases.getKnowledgeHubRootNodes({})`

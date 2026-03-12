@@ -50,29 +50,21 @@ Each example is in its own folder under `examples/` with a runnable script and a
 |--------|--------|-------------|
 | [create-knowledge-base](examples/create-knowledge-base/) | `npm run run:create` | Create a new knowledge base |
 | [list-knowledge-bases](examples/list-knowledge-bases/) | `npm run run:list` | List knowledge bases |
-| [get-knowledge-base](examples/get-knowledge-base/) | `npm run run:get` or `-- <kbId>` | Get one KB by id (creates one if no id) |
-| [update-knowledge-base](examples/update-knowledge-base/) | `npm run run:update` or `-- <kbId>` | Update a KB (creates one if no id) |
+| [get-knowledge-base](examples/get-knowledge-base/) | `npm run run:get` | Create a KB, then get it by id |
+| [update-knowledge-base](examples/update-knowledge-base/) | `npm run run:update` | Create a KB, then update it |
 | [get-hub-root-nodes](examples/get-hub-root-nodes/) | `npm run run:root-nodes` | Get hub root nodes |
-| [get-hub-child-nodes](examples/get-hub-child-nodes/) | `npm run run:child-nodes` or `-- <kbId>` | Get child nodes of a KB (creates one if no id) |
-| [delete-knowledge-base](examples/delete-knowledge-base/) | `npm run run:delete` or `-- <kbId>` | Delete a KB (creates then deletes if no id) |
+| [get-hub-child-nodes](examples/get-hub-child-nodes/) | `npm run run:child-nodes` | Create a KB, then get its child nodes |
+| [delete-knowledge-base](examples/delete-knowledge-base/) | `npm run run:delete` | Create a KB, then delete it |
 
-For get, update, child-nodes, and delete: if you omit the KB id (no `KB_ID` and no argument), the example creates a new knowledge base and uses it for that run. To use an existing KB, set **`KB_ID`** or pass the id as an argument:
-
-```bash
-KB_ID=your-kb-id npm run run:get
-npm run run:get -- your-kb-id
-```
+Examples that need a KB id create a knowledge base first to get the id, then run the operation.
 
 ## Project structure
 
 | Path | Purpose |
 |------|---------|
 | `src/logger.ts` | Shared logger (info, warn, error, json) |
-| `src/client.ts` | PipesHub client creation and env constants |
-| `src/resolve-kb-id.ts` | Resolve KB id from `KB_ID` or CLI; or create a new KB via `getKbIdOrCreate(client)` |
-| `src/kb-ops.ts` | Knowledge Base API operations used by examples and full flow |
-| `src/index.ts` | Full-flow entrypoint (create → … → delete) |
-| `examples/*/` | One folder per operation: `index.ts` (runnable) + `README.md` |
+| `src/index.ts` | Full-flow entrypoint (create → … → delete); client and KB ops inlined here |
+| `examples/*/` | One folder per operation: `index.ts` (runnable, with getClient + op inlined) + `README.md` |
 
 ## See also
 

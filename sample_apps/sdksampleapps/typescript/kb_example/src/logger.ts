@@ -1,6 +1,8 @@
 /**
- * Standard logger for kb_example scripts.
+ * Shared logger for all kb_example scripts.
+ *
  * Use this instead of console so output is consistent and easy to follow.
+ * All messages are prefixed with [INFO], [WARN], or [ERROR].
  */
 
 const LEVEL = {
@@ -9,6 +11,7 @@ const LEVEL = {
   ERROR: "error",
 } as const;
 
+/** Sends a formatted message to the correct console method (log, warn, or error). */
 function formatMessage(level: string, message: string, rest: unknown[]): void {
   const prefix = `[${level.toUpperCase()}]`;
   const args = rest.length > 0 ? rest : [];
