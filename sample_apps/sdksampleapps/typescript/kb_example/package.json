@@ -6,9 +6,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "ts-node src/index.ts",
-    "run:local": "npm run check-env && npm run dev",
-    "check-env": "ts-node scripts/check-env.ts"
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "@pipeshub-ai/sdk": "^0.1.0",
