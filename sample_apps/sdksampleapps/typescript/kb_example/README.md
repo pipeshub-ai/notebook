@@ -1,8 +1,6 @@
-# PipesHub KnowledgeBases API – TypeScript Sample
+# PipesHub Knowledge Bases API — TypeScript Sample
 
-This sample demonstrates the **KnowledgeBases** API using the PipesHub TypeScript SDK (`@pipeshub-ai/sdk`).
-
-**What it does:** Runs a linear flow: create a knowledge base, list and get it, update its name, fetch knowledge hub root and child nodes, then delete the KB for cleanup. Each step logs a clear header and the API response.
+This sample demonstrates the **Knowledge Bases** API using the PipesHub TypeScript SDK (`@pipeshub-ai/sdk`). The code is organized into small, runnable examples so you can read and run one operation at a time.
 
 ## Prerequisites
 
@@ -17,77 +15,66 @@ This sample demonstrates the **KnowledgeBases** API using the PipesHub TypeScrip
    npm install
    ```
 
-2. Copy the example env file and set your token:
+2. Configure environment:
 
    ```bash
    cp .env.example .env
    ```
 
-   Edit `.env` and set `PIPESHUB_BEARER_AUTH` to your bearer token. Optionally set `PIPESHUB_SERVER_URL` if you use a different API base (default is `https://app.pipeshub.com/api/v1`).
+   Edit `.env` and set:
 
-## Run
+   - **`PIPESHUB_BEARER_AUTH`** (required) — your bearer token
+   - **`PIPESHUB_SERVER_URL`** (optional) — API base URL; default is `https://app.pipeshub.com/api/v1`
 
-- **Full flow (default):** create → list → get → update → root-nodes → child-nodes → delete
+## Running the sample
 
-  ```bash
-  npm run dev
-  ```
+### Full flow
 
-- **Individual commands** — pass one or more commands in order. For commands that need a KB id (`get`, `update`, `child-nodes`, `delete`), pass the id as the next argument or set `KB_ID` in the environment.
-
-- **Help:** `npm run dev -- --help`
-
-### Command reference (full examples)
-
-| Command | Description | Example |
-|--------|-------------|---------|
-| `create` | Create a new knowledge base (prints id) | `npm run dev -- create` |
-| `list` | List knowledge bases | `npm run dev -- list` |
-| `get <kbId>` | Get a single KB by id | `npm run dev -- get 4f2426f1-251c-4ff3-941e-5571b4eb31b6` |
-| `update <kbId>` | Update KB name | `npm run dev -- update 4f2426f1-251c-4ff3-941e-5571b4eb31b6` |
-| `root-nodes` | Get knowledge hub root nodes | `npm run dev -- root-nodes` |
-| `child-nodes <kbId>` | Get child nodes of a KB | `npm run dev -- child-nodes 4f2426f1-251c-4ff3-941e-5571b4eb31b6` |
-| `delete <kbId>` | Delete a knowledge base | `npm run dev -- delete 4f2426f1-251c-4ff3-941e-5571b4eb31b6` |
-| `all` | Run full flow (same as no args) | `npm run dev -- all` |
-
-**Using `KB_ID` instead of inline id:**
+Runs the complete sequence: create → list → get → update → root-nodes → child-nodes → delete.
 
 ```bash
-export KB_ID=4f2426f1-251c-4ff3-941e-5571b4eb31b6
-npm run dev -- get
-npm run dev -- update
-npm run dev -- child-nodes
-npm run dev -- delete
+npm run dev
 ```
 
-**Chaining multiple commands:**
+To build and run the compiled script:
 
 ```bash
-npm run dev -- create list
-npm run dev -- list root-nodes
-npm run dev -- get 4f2426f1-251c-4ff3-941e-5571b4eb31b6 update child-nodes
+npm run build && npm start
 ```
 
-- **Build then run:** `npm run build && npm start`
+### Individual examples
 
-## Operations demonstrated
+Each example is in its own folder under `examples/` with a runnable script and a README. Use the npm scripts below, or run the script directly (see the example’s README for details).
 
-| Step | Operation | Description |
-|------|------------|-------------|
-| 1 | `createKnowledgeBase` | Create a new knowledge base |
-| 2 | `listKnowledgeBases` | List KBs with optional limit/sort |
-| 3 | `getKnowledgeBase` | Get a single KB by ID |
-| 4 | `updateKnowledgeBase` | Update the KB name |
-| 5 | `getKnowledgeHubRootNodes` | Get root nodes (KBs, connectors, apps) |
-| 6 | `getKnowledgeHubChildNodes` | Get children of the created KB |
-| 7 | `deleteKnowledgeBase` | Delete the KB (cleanup) |
+| Example | Script | Description |
+|--------|--------|-------------|
+| [create-knowledge-base](examples/create-knowledge-base/) | `npm run run:create` | Create a new knowledge base |
+| [list-knowledge-bases](examples/list-knowledge-bases/) | `npm run run:list` | List knowledge bases |
+| [get-knowledge-base](examples/get-knowledge-base/) | `npm run run:get` or `-- <kbId>` | Get one KB by id (creates one if no id) |
+| [update-knowledge-base](examples/update-knowledge-base/) | `npm run run:update` or `-- <kbId>` | Update a KB (creates one if no id) |
+| [get-hub-root-nodes](examples/get-hub-root-nodes/) | `npm run run:root-nodes` | Get hub root nodes |
+| [get-hub-child-nodes](examples/get-hub-child-nodes/) | `npm run run:child-nodes` or `-- <kbId>` | Get child nodes of a KB (creates one if no id) |
+| [delete-knowledge-base](examples/delete-knowledge-base/) | `npm run run:delete` or `-- <kbId>` | Delete a KB (creates then deletes if no id) |
 
-**Not exercised in this sample:**
+For get, update, child-nodes, and delete: if you omit the KB id (no `KB_ID` and no argument), the example creates a new knowledge base and uses it for that run. To use an existing KB, set **`KB_ID`** or pass the id as an argument:
 
-- **`reindexFailedRecords`** – Used for connector-specific reindexing; requires a connector context.
-- **`moveRecord`** – Moves a record within a KB; requires a `recordId` (e.g. from an upload or connector). Example: `moveRecord({ kbId, recordId, body: { targetFolderId: "..." } })` or an empty body to move to root.
+```bash
+KB_ID=your-kb-id npm run run:get
+npm run run:get -- your-kb-id
+```
+
+## Project structure
+
+| Path | Purpose |
+|------|---------|
+| `src/logger.ts` | Shared logger (info, warn, error, json) |
+| `src/client.ts` | PipesHub client creation and env constants |
+| `src/resolve-kb-id.ts` | Resolve KB id from `KB_ID` or CLI; or create a new KB via `getKbIdOrCreate(client)` |
+| `src/kb-ops.ts` | Knowledge Base API operations used by examples and full flow |
+| `src/index.ts` | Full-flow entrypoint (create → … → delete) |
+| `examples/*/` | One folder per operation: `index.ts` (runnable) + `README.md` |
 
 ## See also
 
-- [PipesHub API – KnowledgeBases](https://docs.pipeshub.com/api-reference)
+- [PipesHub API — Knowledge Bases](https://docs.pipeshub.com/api-reference)
 - Other samples in `sample_apps/sdksampleapps/` (Go, Python)
