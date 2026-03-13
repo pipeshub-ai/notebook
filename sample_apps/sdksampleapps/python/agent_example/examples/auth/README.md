@@ -14,6 +14,10 @@ python examples/auth/index.py
 
 Or run this example via the main entry: `python main.py auth`
 
+## What you'll see
+
+If `PIPESHUB_BEARER_AUTH` is set: a log line with a short token prefix (e.g. `Got bearer token abc...`) and no browser. If using OAuth: your browser opens for PipesHub login, then a "Login successful! You can close this tab." page.
+
 ## Environment
 
 | Variable | Required | Description |
@@ -28,5 +32,5 @@ Or run this example via the main entry: `python main.py auth`
 
 ## Code reference
 
-- **Token helper:** `get_bearer_token(server_url)` in `src/auth.py`
+- **Token helper:** `get_bearer_token(server_url)` is defined in this example (no shared auth module).
 - **API:** `GET /oauth2/authorize`, `POST /oauth2/token` (OAuth 2.0 with PKCE)

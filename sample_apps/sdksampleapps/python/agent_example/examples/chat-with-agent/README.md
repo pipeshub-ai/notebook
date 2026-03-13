@@ -14,12 +14,18 @@ python examples/chat-with-agent/index.py
 
 Or run this example via the main entry: `python main.py chat-with-agent`
 
+## What you'll see
+
+A prompt `> `; you type a message and the agent replies. Type `quit` or `exit` to end the session.
+
 ## Environment
 
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `PIPESHUB_BEARER_AUTH` | Yes (or OAuth) | Bearer token for API authentication |
 | `PIPESHUB_SERVER_URL`  | No | API base URL (default: `https://app.pipeshub.com/api/v1`) |
+
+To use OAuth instead of a bearer token, set `PIPESHUB_OAUTH_CLIENT_ID` and `PIPESHUB_OAUTH_CLIENT_SECRET` (see [auth](../auth/) example).
 
 ## Code reference
 

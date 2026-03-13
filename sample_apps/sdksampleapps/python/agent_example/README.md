@@ -1,6 +1,19 @@
 # PipesHub Agents API — Python Sample
 
-This sample demonstrates the **Agents** API using the PipesHub Python SDK (`pipeshub-sdk`). The code is organized into small, runnable examples so you can read and run one operation at a time.
+This is the **PipesHub Agents API** sample using the Python SDK (`pipeshub-sdk`). It is organized into small, runnable examples (auth, list-agents, create-agent, chat-with-agent) plus an optional single-script full flow. To get going: install dependencies, set `.env` with at least one auth option, then run one or all examples.
+
+## Quick start
+
+From the `agent_example` directory:
+
+```bash
+pip install -e .
+cp .env.example .env
+# Edit .env: set PIPESHUB_BEARER_AUTH or PIPESHUB_OAUTH_CLIENT_ID + PIPESHUB_OAUTH_CLIENT_SECRET
+
+python main.py auth          # verify auth
+python main.py list-agents  # list your agents (or run all: python main.py)
+```
 
 ## Prerequisites
 
@@ -34,6 +47,23 @@ This sample demonstrates the **Agents** API using the PipesHub Python SDK (`pipe
    - **`PIPESHUB_SERVER_URL`** (optional) — API base URL; default is `https://app.pipeshub.com/api/v1`
 
 ## Running the sample
+
+You can run the sample in two ways:
+
+- **`main.py`** — Run examples one-by-one or in sequence. Best for learning and trying each operation (auth, list agents, create agent, chat).
+- **`src/index.py`** — Full flow in one process (auth → create agent → chat REPL). Best for a single-script demo.
+
+```mermaid
+flowchart LR
+  subgraph main [main.py]
+    A[Auth] --> B[List agents]
+    A --> C[Create agent]
+    A --> D[Chat with agent]
+  end
+  subgraph full [src/index.py]
+    E[Auth] --> F[Create agent] --> G[Chat REPL]
+  end
+```
 
 ### Main entry (run one or all examples)
 
@@ -83,7 +113,7 @@ Each example can also be run directly. From the `agent_example` directory:
 | Path | Purpose |
 |------|---------|
 | `main.py` | Main entrypoint: run all examples or one by name (auth, list-agents, create-agent, chat-with-agent) |
-| `src/auth.py` | Shared auth: get bearer token from env or OAuth browser login (PKCE) |
+| (none) | Auth is inlined in each example and in `src/index.py`: Bearer from env or OAuth browser login (PKCE). Each example is self-contained so you can read and run one file without a shared auth module; the same logic is repeated on purpose. |
 | `src/logger.py` | Shared logger (info, warn, error, json) |
 | `src/index.py` | Full flow in one go (auth → create agent → chat REPL) |
 | `examples/*/` | One folder per operation: `index.py` (runnable) + `README.md` |
