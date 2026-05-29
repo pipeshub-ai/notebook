@@ -10,7 +10,7 @@ import (
 	"github.com/pipeshub-ai/pipeshub-sdk-go/models/components"
 )
 
-func NewClient(email, password string) (*pipeshub.Pipeshub, error) {
+func NewClient(email, password string) (*pipeshub.SDK, error) {
 	baseURL := os.Getenv("PIPESHUB_BASE_URL") + "/api/v1"
 	ctx := context.Background()
 
