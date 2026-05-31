@@ -36,24 +36,28 @@ func main() {
 
 	ctx := context.Background()
 
-	connectorID, err := findConnectorIDByName(ctx, client, connectorName)
+	// ─── Find an existing conversation ───
+
+	conversationID, err := findFirstConversation(ctx, client)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Printf("Using conversation: %s\n\n", conversationID)
 
-	query := "What are some latest news from stock market?"
+	// ─── Send a follow-up message to the existing conversation ───
 
-	res, err := client.Agents.StreamAgentConversation(ctx, agentKey, components.AgentStreamCreateConversationRequest{
-		Query:   query,
-		Filters: &components.Filters{Apps: []string{connectorID}},
+	query := "Can you give me more details on that?"
+
+	res, err := client.Agents.StreamAgentConversationMessage(ctx, agentKey, conversationID, components.AgentAddMessageStreamRequest{
+		Query: query,
 	})
 	if err != nil {
-		log.Fatalf("conversation: %v", err)
+		log.Fatalf("stream message: %v", err)
 	}
-	if res.AgentStreamSSEEvent == nil {
+	if res.AgentMessageStreamSSEEvent == nil {
 		log.Fatal("no SSE stream returned")
 	}
-	stream := res.AgentStreamSSEEvent
+	stream := res.AgentMessageStreamSSEEvent
 	defer stream.Close()
 
 	fmt.Printf("You: %s\n\nBot: ", query)
@@ -64,7 +68,7 @@ func main() {
 			continue
 		}
 		switch *ev.Event {
-		case components.AgentStreamSSEEventEventComplete:
+		case components.AgentMessageStreamSSEEventEventComplete:
 			var payload struct {
 				Conversation struct {
 					Messages []struct {
@@ -83,7 +87,7 @@ func main() {
 				}
 			}
 			log.Fatal("no bot response in complete event")
-		case components.AgentStreamSSEEventEventError:
+		case components.AgentMessageStreamSSEEventEventError:
 			log.Fatalf("stream error: %s", *ev.Data)
 		}
 	}
@@ -92,20 +96,23 @@ func main() {
 	}
 }
 
-func findConnectorIDByName(ctx context.Context, sdk *pipeshub.SDK, name string) (string, error) {
-	res, err := sdk.KnowledgeHub.GetKnowledgeHubRootNodes(ctx, operations.GetKnowledgeHubRootNodesRequest{})
+func findFirstConversation(ctx context.Context, sdk *pipeshub.SDK) (string, error) {
+	res, err := sdk.Agents.ListAgentConversations(ctx, operations.ListAgentConversationsRequest{
+		AgentKey: agentKey,
+	})
 	if err != nil {
-		return "", fmt.Errorf("get knowledge hub root nodes: %w", err)
+		return "", fmt.Errorf("list conversations: %w", err)
 	}
-	if res == nil || res.KnowledgeHubNodesResponse == nil {
-		return "", fmt.Errorf("get knowledge hub root nodes: empty response")
-	}
-
-	for _, n := range res.KnowledgeHubNodesResponse.GetItems() {
-		if n.Name == name && n.Origin == components.KnowledgeHubNodeOriginConnector {
-			return n.ID, nil
-		}
+	if res == nil || res.AgentConversationListResponse == nil {
+		return "", fmt.Errorf("list conversations: empty response")
 	}
 
-	return "", fmt.Errorf("connector %q not found", name)
+	convs := res.AgentConversationListResponse.Conversations
+	if len(convs) == 0 {
+		return "", fmt.Errorf("no conversations found for agent %s", agentKey)
+	}
+	if convs[0].ID == nil {
+		return "", fmt.Errorf("first conversation has no ID")
+	}
+	return *convs[0].ID, nil
 }
